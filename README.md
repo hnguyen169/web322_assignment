@@ -1,12 +1,12 @@
 # Web322 Assignment
 
-Student Name: Harrison Nguyen
-Student Number: 167096239
-Student Email: hnguyen169@myseneca.ca
-Date Created: September 21, 2024
+**Student Name:** Harrison Nguyen  
+**Student Number:** 167096239  
+**Student Email:** hnguyen169@myseneca.ca  
+**Date Created:** September 21, 2024
 
-GITHUB URL: https://github.com/hnguyen169/WEB322-Works
-VERCEL URL: https://vercel.com/hnguyen169s-projects/web-322-works
+**GITHUB URL:** https://github.com/hnguyen169/WEB322-Works  
+**VERCEL URL:** https://vercel.com/hnguyen169s-projects/web-322-works  
 
 ### Technology Stack
 
