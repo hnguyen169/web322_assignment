@@ -1,10 +1,18 @@
-const express = require('express'); // "require" the Express module
-const app = express(); // obtain the "app" object
-const HTTP_PORT = process.env.PORT || 8080; // assign a port
+// include the module
+const express = require("express");
 
-// start the server on the port and output a confirmation to the console
-app.listen(HTTP_PORT, () => console.log(`server listening on: ${HTTP_PORT}`));
+// the root folder
+const path = require("path");
+
+// instantiate the express lib
+const app = express();
+
+const HTTP_PORT = process.env.PORT || 8080;
 
 app.get('/', (req, res) => {
-    res.send('Harrison Nguyen - 167096239');
-  });
+  res.send('Harrison Nguyen - 167096239');
+});
+
+// listen for connections
+app.listen(HTTP_PORT, () => 
+    console.log("Server listening on: http://localhost:" + HTTP_PORT));
