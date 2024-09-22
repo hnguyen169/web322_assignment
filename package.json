@@ -2,10 +2,10 @@
   "name": "web322_assignments",
   "version": "1.0.0",
   "description": "**Student Name:** Harrison Nguyen  \r **Student Number:** 167096239  \r **Student Email:** hnguyen169@myseneca.ca  \r **Date Created:** September 21, 2024",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "author": "Harrison Nguyen",
   "license": "ISC",
