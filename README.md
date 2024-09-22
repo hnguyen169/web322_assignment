@@ -6,7 +6,10 @@
 **Date Created:** September 21, 2024
 
 **GITHUB URL:** https://github.com/hnguyen169/web322_assignment  
-**VERCEL URL:** https://web-322-assignment-three.vercel.app/  
+**VERCEL URLs:**  
+https://web-322-assignment-three.vercel.app/  
+https://web-322-assignment-hnguyen169s-projects.vercel.app/  
+https://web-322-assignment-git-master-hnguyen169s-projects.vercel.app/  
 
 ### Technology Stack
 
