@@ -13,7 +13,7 @@ https://web-322-assignment-git-master-hnguyen169s-projects.vercel.app/
 
 ### Technology Stack
 
-**Frontend**:    
+**Frontend**: HTML, JavaScript  
 **Backend**: TBD  
 **Database**: TBD  
 
