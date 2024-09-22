@@ -5,8 +5,8 @@
 **Student Email:** hnguyen169@myseneca.ca  
 **Date Created:** September 21, 2024
 
-**GITHUB URL:** https://github.com/hnguyen169/WEB322-Works  
-**VERCEL URL:** https://vercel.com/hnguyen169s-projects/web-322-works  
+**GITHUB URL:** https://github.com/hnguyen169/web322_assignment  
+**VERCEL URL:** https://web-322-assignment-three.vercel.app/  
 
 ### Technology Stack
 
