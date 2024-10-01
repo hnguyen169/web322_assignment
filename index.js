@@ -4,14 +4,16 @@ const path = require("path");
 
 const app = express();
 
-const HTTP_PORT = process.env.PORT || 8080;
+app.use(express.static('public'));
 
-app.get('/', (req, res) => {
+const HTTP_PORT = process.env.PORT || 4545;
 
-  var htmlPath = path.join(__dirname, '/views/index.html');
+app.get('/', (req, res) => { // (see "Response Objects on Web322.ca")
+
+  var htmlPath = path.join(__dirname, '/views/about.html');
 
   res.sendFile(htmlPath);
 });
 
 app.listen(HTTP_PORT, () => 
-    console.log("Server listening on: http://localhost:" + HTTP_PORT));
+    console.log("Express http server listening on port: " + HTTP_PORT));
