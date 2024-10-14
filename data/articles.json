@@ -1,0 +1,82 @@
+[
+    {
+        "id": 1,
+        "title": "Introduction to JavaScript",
+        "content": "JavaScript is a versatile language used for web development...",
+        "author": "John Doe",
+        "published": true,
+        "category": "Programming"
+    },
+    {
+        "id": 2,
+        "title": "The Future of AI",
+        "content": "Artificial intelligence continues to evolve rapidly...",
+        "author": "Jane Smith",
+        "published": false,
+        "category": "Technology"
+    },
+    {
+        "id": 3,
+        "title": "Quantum Physics Explained",
+        "content": "Quantum physics reveals the nature of reality at the smallest scales...",
+        "author": "Dr. Emily White",
+        "published": true,
+        "category": "Science"
+    },
+    {
+        "id": 4,
+        "title": "The Importance of Mental Health",
+        "content": "Understanding the impact of mental health on overall well-being...",
+        "author": "Dr. Sarah Green",
+        "published": true,
+        "category": "Health"
+    },
+    {
+        "id": 5,
+        "title": "Online Learning Platforms",
+        "content": "The rise of e-learning has transformed education for millions...",
+        "author": "Alice Johnson",
+        "published": true,
+        "category": "Education"
+    },
+    {
+        "id": 6,
+        "title": "How to Save for Retirement",
+        "content": "Effective strategies for saving money and preparing for the future...",
+        "author": "Robert Lee",
+        "published": false,
+        "category": "Finance"
+    },
+    {
+        "id": 7,
+        "title": "How to Start Your Own Business",
+        "content": "The essential steps to launching a successful business...",
+        "author": "Jane Smith",
+        "published": true,
+        "category": "Business"
+    },
+    {
+        "id": 8,
+        "title": "Creating a Balanced Lifestyle",
+        "content": "Tips for maintaining balance in work, health, and leisure...",
+        "author": "Emily Davis",
+        "published": true,
+        "category": "Lifestyle"
+    },
+    {
+        "id": 9,
+        "title": "Top 10 Movies of the Year",
+        "content": "A look at the best films released this year across various genres...",
+        "author": "John Doe",
+        "published": false,
+        "category": "Entertainment"
+    },
+    {
+        "id": 10,
+        "title": "How to Train for a Marathon",
+        "content": "Step-by-step guide for building endurance and staying motivated...",
+        "author": "Michael Brown",
+        "published": true,
+        "category": "Sports"
+    }
+]

@@ -8,11 +8,14 @@ app.use(express.static('public'));
 
 const HTTP_PORT = process.env.PORT || 4545;
 
-app.get('/', (req, res) => { // (see "Response Objects on Web322.ca")
+app.get('/', (req, res) => {
+    res.redirect('/about');
+});
 
-  var htmlPath = path.join(__dirname, '/views/about.html');
-
-  res.sendFile(htmlPath);
+app.get('/about', (req, res) => {
+    var htmlPath = path.join(__dirname, '/views/about.html');
+  
+    res.sendFile(htmlPath);
 });
 
 app.listen(HTTP_PORT, () => 
