@@ -18,5 +18,13 @@ app.get('/about', (req, res) => {
     res.sendFile(htmlPath);
 });
 
+app.get('/articles', (req, res) => {
+    res.send('Articles');
+});
+
+app.get('/categories', (req, res) => {
+    res.send('Categories');
+});
+
 app.listen(HTTP_PORT, () => 
     console.log("Express http server listening on port: " + HTTP_PORT));
