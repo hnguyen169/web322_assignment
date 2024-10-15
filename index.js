@@ -1,6 +1,15 @@
+/******************************
+* Name: Harrison Nguyen
+* Section: WEB322 NDD
+* Student ID: 167096239
+* Email: hnguyen169@myseneca.ca
+* Date Created: September 21, 2024
+* Last Modified: October 14, 2024
+******************************/
+
 const express = require("express");
 const path = require("path");
-const contentService = require("./content-service")
+const contentService = require("./content-service");
 
 const app = express();
 
