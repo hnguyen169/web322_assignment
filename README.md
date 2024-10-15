@@ -29,13 +29,13 @@ To run the program, follow these steps:
    git clone git@github.com:hnguyen169/web322_assignment.git
    cd https://github.com/hnguyen169/web322_assignment.git
 
-3. **Install Dependencies:** Navigate to the project directory and run:
+3. **Install Dependencies -** Navigate to the project directory and run:
    ```bash
    npm install
 
-4. **Start the Server:** In the terminal, run:
+4. **Start the Server -** In the terminal, run:
    ```bash
-   nod index.js
+   node index.js
 
 ### Notes
 
