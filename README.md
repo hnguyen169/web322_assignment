@@ -3,7 +3,7 @@
 **Student Name:** Harrison Nguyen  
 **Student Number:** 167096239  
 **Student Email:** hnguyen169@myseneca.ca  
-**Date Created:** September 21, 2024
+**Date Created:** September 21, 2024  
 **Last Updated:** October 14, 2024
 
 **GITHUB URL:** https://github.com/hnguyen169/web322_assignment  
