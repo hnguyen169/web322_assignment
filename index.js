@@ -1,6 +1,6 @@
 const express = require("express");
-
 const path = require("path");
+const contentService = require("./content-service")
 
 const app = express();
 
@@ -13,18 +13,36 @@ app.get('/', (req, res) => {
 });
 
 app.get('/about', (req, res) => {
-    var htmlPath = path.join(__dirname, '/views/about.html');
+    const htmlPath = path.join(__dirname, '/views/about.html');
   
     res.sendFile(htmlPath);
 });
 
 app.get('/articles', (req, res) => {
-    res.send('Articles');
+    contentService.getAllArticles()
+        .then(data => {
+            res.json(data);
+        })
+        .catch(err => {
+            res.json({ message: err });
+        });
 });
 
 app.get('/categories', (req, res) => {
-    res.send('Categories');
+    contentService.getCategories()
+        .then(data => {
+            res.json(data);
+        })
+        .catch(err => {
+            res.json({ message: err });
+        });
 });
 
-app.listen(HTTP_PORT, () => 
-    console.log("Express http server listening on port: " + HTTP_PORT));
+contentService.initialize()
+    .then(() => {
+        app.listen(HTTP_PORT, () =>
+            console.log("Express http server listening on port: " + HTTP_PORT));
+    })
+    .catch(err => {
+        console.error(err);
+    });
