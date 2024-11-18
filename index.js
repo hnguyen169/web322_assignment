@@ -4,7 +4,7 @@
 * Student ID: 167096239
 * Email: hnguyen169@myseneca.ca
 * Date Created: September 21, 2024
-* Last Modified: October 14, 2024
+* Last Modified: October 17, 2024
 ******************************/
 
 const express = require("express");
@@ -45,6 +45,10 @@ app.get('/categories', (req, res) => {
         .catch(err => {
             res.json({ message: err });
         });
+});
+
+app.get('/articles/add', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'addArticle.html'));
 });
 
 contentService.initialize()
