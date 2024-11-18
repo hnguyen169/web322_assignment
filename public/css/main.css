@@ -1,0 +1,45 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+}
+
+header, h2{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+footer {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+}
+
+.navbar .navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar .nav-link {
+    margin-right: 15px;
+}
+
+form fieldset {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+nav a {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
