@@ -4,7 +4,7 @@
 **Student Number:** 167096239  
 **Student Email:** hnguyen169@myseneca.ca  
 **Date Created:** September 21, 2024  
-**Last Updated:** October 14, 2024
+**Last Updated:** November 18, 2024
 
 **GITHUB URL:** https://github.com/hnguyen169/web322_assignment  
 **VERCEL URLs:**  
@@ -14,28 +14,39 @@ https://web-322-assignment-git-master-hnguyen169s-projects.vercel.app/
 
 ### Technology Stack
 
-**Frontend**: HTML, JavaScript  
-**Backend**: Node.js, Express  
-**Database**: JSON files  
+**Frontend**: 
+- HTML  
+- JavaScript  
+- Boostrap 5
+- Google Fonts (Roboto)
+
+**Backend**: 
+- Node.js  
+- Express.js
+- body-parser (prasing POST requests)
+- Cloudinary (image uploads)
+
+**Database**: 
+- JSON files  
 
 ### Running the Program
 
 To run the program, follow these steps:
 
-1. **Install Node.js:** Ensure that Node.js is installed on your machine.
-
-2. **Clone the Repository:**
+1. **Clone the repository:**
    ```bash
    git clone git@github.com:hnguyen169/web322_assignment.git
-   cd https://github.com/hnguyen169/web322_assignment.git
 
-3. **Install Dependencies -** Navigate to the project directory and run:
+2. **Install dependencies -** In the project directory run:
    ```bash
    npm install
 
-4. **Start the Server -** In the terminal, run:
+3. **Start the Server -** In the terminal, run:
    ```bash
    node index.js
+
+4. **Navigate to -**
+   [http://localhost:4545](http://localhost:4545)
 
 ### Notes
 
