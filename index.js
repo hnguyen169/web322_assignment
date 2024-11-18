@@ -64,6 +64,10 @@ app.get('/categories', (req, res) => {
         });
 });
 
+app.get('/articles/add', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'addArticle.html'));
+});
+
 // POST route to handle adding articles
 app.post('/articles/add', upload.single("featureImage"), (req, res) => { 
     // Check if file was uploaded
