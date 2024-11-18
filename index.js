@@ -19,6 +19,8 @@ const app = express();
 
 // Set up middleware
 app.use(express.static('public'));
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Define port
 const HTTP_PORT = process.env.PORT || 4545;
@@ -34,7 +36,18 @@ cloudinary.config({
 // Multer for file uploads
 const upload = multer(); // No disk storage, files are stored in memory
 
-// Routes
+// Function to process articles
+const processArticle = (req, res, imageUrl) => {
+    // Attach the image URL to req.body
+    req.body.featureImage = imageUrl;
+
+    // Add the article using content-service
+    contentService.addArticle(req.body)
+        .then(() => res.redirect('/articles'))
+        .catch(err => res.status(500).json({ message: "Article creation failed", error: err }));
+};
+
+// GET Routes
 app.get('/', (req, res) => {
     res.redirect('/about');
 });
@@ -45,13 +58,43 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/articles', (req, res) => {
-    contentService.getAllArticles()
-        .then(data => {
-            res.json(data);
-        })
-        .catch(err => {
-            res.json({ message: err });
-        });
+    // Optional filter using query string
+    const { category, minDate } = req.query;
+
+    // If category is provided
+    if (category) {
+        contentService.getArticlesByCategory(category)
+            .then(filteredArticles => res.json(filteredArticles))
+            .catch(err => res.status(404).json({ message: err }));
+    }
+    // If minDate is provided
+    else if (minDate) {
+        // Validate minDate before calling getArticlesByMinDate
+        const parsedDate = new Date(minDate);
+        if (isNaN(parsedDate.getTime())) res.status(400).json({ message: "Invalid date format. Expected YYYY-MM-DD." });
+        else {
+            // Valid minDate, then filter
+            contentService.getArticlesByMinDate(minDate)
+                .then(filteredArticles => res.json(filteredArticles))
+                .catch(err => res.status(404).json({ message: err }));
+        }
+    }
+    // If no query parameters are provided
+    else {
+        contentService.getAllArticles()
+            .then(allArticles => res.json(allArticles))
+            .catch(err => res.status(404).json({ message: err }));
+    }
+});
+
+// GET route for article by ID
+app.get('/article/:id', (req, res) => {
+    const { id } = req.params;
+
+    // Search article by provided ID
+    contentService.getArticleById(id)
+        .then(article => res.json(article))
+        .catch(err => res.status(404).json({ message: err }));
 });
 
 app.get('/categories', (req, res) => {
@@ -75,15 +118,13 @@ app.post('/articles/add', upload.single("featureImage"), (req, res) => {
         let streamUpload = (req) => { 
             return new Promise((resolve, reject) => { 
                 // Upload file to Cloudinary by stream
-                let stream = cloudinary.uploader.upload_stream( 
-                    (error, result) => { 
-                        if (result) resolve(result); // Upload succesful
+                let stream = cloudinary.uploader.upload_stream((error, result) => { 
+                        if (result) resolve(result); // Upload successful
                         else reject(error); // Upload failed
-                    } 
-                ); 
+                    }); 
                 streamifier.createReadStream(req.file.buffer).pipe(stream); 
             }); 
-        };      
+        };
 
         // Asynchronous function for upload
         async function upload(req) { 
@@ -94,24 +135,13 @@ app.post('/articles/add', upload.single("featureImage"), (req, res) => {
         // Handle file upload
         upload(req).then((uploaded) => { 
             // Process article with image URL
-            processArticle(uploaded.url); 
+            processArticle(req, res, uploaded.url); 
         }).catch(err => res.status(500).json({ message: "Image upload failed", error: err })); 
         } 
-        else { 
-            // No file uploaded, process article without image
-            processArticle(""); 
-        } 
-        
-        // Function to process article and save it
-        function processArticle(imageUrl) {
-            // Attach image URL to article data
-            req.body.featureImage = imageUrl;
-        
-            // Add article to content-service 
-            contentService.addArticle((req.body) // Call content service to add article
-                .then(() => res.redirect('/articles')) 
-                .catch(err => res.status(500).json({ message: "Article creation failed", error: err })));
-        } 
+    else { 
+        // No file uploaded, process article without image
+        processArticle(req, res, ""); 
+    }
 });
 
 // Initialize content service and start server

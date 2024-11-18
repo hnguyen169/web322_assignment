@@ -85,7 +85,9 @@ function addArticle(articleData) {
 // Get articles by category
 function getArticlesByCategory(category) {
     return new Promise((resolve, reject) => {
-        const filteredArticles = articles.filter(article => article.category == category);
+        const filteredArticles = articles.filter(article => 
+            // Added toLowerCase() to make the comparison case-insensitive
+            article.category && article.category.toLowerCase() == category.toLowerCase());
         if (filteredArticles.length > 0) resolve(filteredArticles);
         else reject("no results returned");
     });
