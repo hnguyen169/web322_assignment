@@ -4,7 +4,7 @@
 * Student ID: 167096239
 * Email: hnguyen169@myseneca.ca
 * Date Created: September 21, 2024
-* Last Modified: November 18, 2024
+* Last Modified: November 24, 2024
 ******************************/
 
 const express = require("express");
@@ -17,8 +17,12 @@ const streamifier = require('streamifier');
 // Initialize express
 const app = express();
 
+// Set up EJS as the templating engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 // Set up middleware
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from public directory
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
@@ -53,38 +57,41 @@ app.get('/', (req, res) => {
 });
 
 app.get('/about', (req, res) => {
-    const htmlPath = path.join(__dirname, '/views/about.html');  
-    res.sendFile(htmlPath);
+    res.render('about');
 });
 
 app.get('/articles', (req, res) => {
     // Optional filter using query string
     const { category, minDate } = req.query;
 
+    // Promise to get data
+    let dataPromise; 
+
     // If category is provided
     if (category) {
-        contentService.getArticlesByCategory(category)
-            .then(filteredArticles => res.json(filteredArticles))
-            .catch(err => res.status(404).json({ message: err }));
+        dataPromise = contentService.getArticlesByCategory(category);            
     }
     // If minDate is provided
     else if (minDate) {
         // Validate minDate before calling getArticlesByMinDate
         const parsedDate = new Date(minDate);
-        if (isNaN(parsedDate.getTime())) res.status(400).json({ message: "Invalid date format. Expected YYYY-MM-DD." });
-        else {
-            // Valid minDate, then filter
-            contentService.getArticlesByMinDate(minDate)
-                .then(filteredArticles => res.json(filteredArticles))
-                .catch(err => res.status(404).json({ message: err }));
+        if (isNaN(parsedDate.getTime())) {
+            res.render('articles', { articles: [], error: "Invalid date format. Expected YYYY-MM-DD." });
+            return;
         }
+        dataPromise = contentService.getArticlesByMinDate(minDate);
+    // If no query is provided, get all articles
+    } else {
+        dataPromise = contentService.getAllArticles();
     }
-    // If no query parameters are provided
-    else {
-        contentService.getAllArticles()
-            .then(allArticles => res.json(allArticles))
-            .catch(err => res.status(404).json({ message: err }));
-    }
+
+    dataPromise
+        .then(articles => { 
+            res.render('articles', { articles, error: articles.length ? null : "No articles found." });
+        })
+        .catch(err => {
+            res.render('articles', { articles: [], error: err.message });
+        });
 });
 
 // GET route for article by ID
@@ -108,7 +115,13 @@ app.get('/categories', (req, res) => {
 });
 
 app.get('/articles/add', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'addArticle.html'));
+    contentService.getCategories()
+        .then(categories => {
+            res.render('addArticle', { categories });
+        })
+        .catch(err => {
+            res.render('addArticle', { categories: [], error: err.message });
+        });
 });
 
 // POST route to handle adding articles
