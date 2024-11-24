@@ -106,11 +106,11 @@ app.get('/article/:id', (req, res) => {
 
 app.get('/categories', (req, res) => {
     contentService.getCategories()
-        .then(data => {
-            res.json(data);
+        .then(categories => {
+            res.render('categories', { categories, error: categories.length ? null : "No categories found." });
         })
         .catch(err => {
-            res.json({ message: err });
+            res.render('categories', { categories: [], error: err.message });
         });
 });
 
