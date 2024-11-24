@@ -117,7 +117,7 @@ app.get('/categories', (req, res) => {
 app.get('/articles/add', (req, res) => {
     contentService.getCategories()
         .then(categories => {
-            res.render('addArticle', { categories });
+            res.render('addArticle', { categories, error: null });
         })
         .catch(err => {
             res.render('addArticle', { categories: [], error: err.message });
