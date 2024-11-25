@@ -103,16 +103,32 @@ app.get('/articles', (req, res) => {
 
 // GET route for article by ID
 app.get('/article/:id', (req, res) => {
-    const { id } = req.params;
+    const articleId = parseInt(req.params.id);
 
-    // Search article by provided ID
-    contentService.getArticleById(id)
-        .then(article => {
-            // Add categoryName to the article object
-            article.categoryName = contentService.getCategoryNameById(article.categoryId);
-            res.json(article);
+    // Fetch the article using content service
+    contentService.getAllArticles()
+        .then(articles => {
+            const article = articles.find(a => a.id === articleId);
+
+            // If article not found or unpublished
+            if (!article || !article.published) {
+                return res.status(404).render('404', { error: "Article not found or unpublished" });
+            }
+
+            // Get category name
+            const categoryName = contentService.getCategoryNameById(article.categoryId);
+
+            // Render article page
+            res.render('article', {
+                article: {
+                    ...article,
+                    categoryName
+                }
+            });
         })
-        .catch(err => res.status(404).json({ message: err }));
+        .catch(err => {
+            res.redirect(`/articles?error=${err.message}`);
+        });
 });
 
 app.get('/categories', (req, res) => {

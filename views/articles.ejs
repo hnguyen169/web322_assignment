@@ -41,7 +41,7 @@
                 <tbody>
                     <% articles.forEach(article => { %>
                         <tr>
-                            <td><%= article.title %></td>
+                            <td><a href="/article/<%= article.id %>"><%= article.title %></a></td>
                             <td><%= article.author %></td>
                             <td><%= article.categoryName %></td>
                             <td><%= article.published ? "Yes" : "No" %></td>
