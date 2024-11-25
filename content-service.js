@@ -93,17 +93,13 @@ function addArticle(articleData) {
 function getArticlesByCategory(category) {
     return new Promise((resolve, reject) => {
         const filteredArticles = articles.filter(article => 
-            // Added toLowerCase() to make the comparison case-insensitive
-            article.category && article.category.toLowerCase() == category.toLowerCase());
+            getCategoryNameById(article.categoryId) === category
+        );
         
-        if (filteredArticles.length > 0) {
-            const updatedArticles = filteredArticles.map(article => ({
-                ...article,
-                categoryName: getCategoryNameById(article.categoryId) // Add category name
-            }));
-            resolve(updatedArticles);
+        if (filteredArticles.length) {
+            resolve(filteredArticles);
         } else {
-            reject("no results returned");
+            reject(new Error("No articles found for this category."));
         }
     });
 }
