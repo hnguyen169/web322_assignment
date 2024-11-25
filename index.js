@@ -86,8 +86,15 @@ app.get('/articles', (req, res) => {
     }
 
     dataPromise
-        .then(articles => { 
-            res.render('articles', { articles, error: articles.length ? null : "No articles found." });
+        .then(articles => {
+            // Map articles to include categoryName
+            const updatedArticles = articles.map(article => {
+                // Ensure categoryName is fetched by categoryId
+                article.categoryName = contentService.getCategoryNameById(article.categoryId);
+                return article;
+            });
+
+            res.render('articles', { articles: updatedArticles, error: articles.length ? null : "No articles found." });
         })
         .catch(err => {
             res.render('articles', { articles: [], error: err.message });
@@ -100,7 +107,11 @@ app.get('/article/:id', (req, res) => {
 
     // Search article by provided ID
     contentService.getArticleById(id)
-        .then(article => res.json(article))
+        .then(article => {
+            // Add categoryName to the article object
+            article.categoryName = contentService.getCategoryNameById(article.categoryId);
+            res.json(article);
+        })
         .catch(err => res.status(404).json({ message: err }));
 });
 

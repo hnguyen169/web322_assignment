@@ -37,12 +37,16 @@ function initialize() {
 // Get all published articles
 function getPublishedArticles() {
     return new Promise((res, rej) => {
-        const publishedArticles = articles.filter(article => article.published);
+        const publishedArticles = articles
+            .filter(article => article.published)
+            .map(article => ({
+                ...article,
+                categoryName: getCategoryNameById(article.categoryId) // Add category name
+            }));
 
         if (publishedArticles.length > 0) {
             res(publishedArticles);
-        }
-        else {
+        } else {
             rej("no results returned");
         }
     });
@@ -52,9 +56,12 @@ function getPublishedArticles() {
 function getAllArticles() {
     return new Promise((res, rej) => {
         if (articles.length > 0) {
-            res(articles);
-        }
-        else {
+            const updatedArticles = articles.map(article => ({
+                ...article,
+                categoryName: getCategoryNameById(article.categoryId) // Add category name
+            }));
+            res(updatedArticles);
+        } else {
             rej("no results returned");
         }
     });
@@ -88,8 +95,16 @@ function getArticlesByCategory(category) {
         const filteredArticles = articles.filter(article => 
             // Added toLowerCase() to make the comparison case-insensitive
             article.category && article.category.toLowerCase() == category.toLowerCase());
-        if (filteredArticles.length > 0) resolve(filteredArticles);
-        else reject("no results returned");
+        
+        if (filteredArticles.length > 0) {
+            const updatedArticles = filteredArticles.map(article => ({
+                ...article,
+                categoryName: getCategoryNameById(article.categoryId) // Add category name
+            }));
+            resolve(updatedArticles);
+        } else {
+            reject("no results returned");
+        }
     });
 }
 
@@ -106,11 +121,24 @@ function getArticlesByMinDate(minDateStr) {
 // Get article by ID
 function getArticleById(id) { 
     return new Promise((resolve, reject) => { 
-        const foundArticle = articles.find(article=> article.id == id); 
-        if (foundArticle) resolve(foundArticle); 
-        else reject("no result returned"); 
+        const foundArticle = articles.find(article => article.id == id); 
+
+        if (foundArticle) {
+            resolve({
+                ...foundArticle,
+                categoryName: getCategoryNameById(foundArticle.categoryId) // Add category name
+            });
+        } else {
+            reject("no result returned");
+        }
     }); 
 }; 
+
+// Helper function to get Name based on ID
+function getCategoryNameById(categoryId) {
+    const category = categories.find(cat => cat.id === categoryId);
+    return category ? category.name : "Unknown Category";
+}
 
 module.exports = {
     initialize,
@@ -120,5 +148,6 @@ module.exports = {
     addArticle,
     getArticlesByCategory,
     getArticlesByMinDate,
-    getArticleById
+    getArticleById,
+    getCategoryNameById
 };
