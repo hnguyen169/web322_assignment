@@ -107,11 +107,33 @@ function getArticlesByCategory(category) {
 // Get articles by minimum date
 function getArticlesByMinDate(minDateStr) { 
     return new Promise((resolve, reject) => { 
-        const minDate = new Date(minDateStr); 
-        const filteredArticles = articles.filter(article => new Date(article.articleDate) >= minDate); 
-        if (filteredArticles.length > 0) resolve(filteredArticles); 
-        else reject("no results returned"); 
-    }); 
+        // Validate the input date string format
+        const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(minDateStr);
+        if (!isValidDate) {
+            reject("Invalid date format. Expected YYYY-MM-DD.");
+            return;
+        }
+
+        // Parse the date
+        const minDate = new Date(minDateStr);
+        if (isNaN(minDate.getTime())) {
+            reject("Invalid date. Could not parse the provided date.");
+            return;
+        }
+
+        // Filter articles based on the date
+        const filteredArticles = articles.filter(article => {
+            const articleDate = new Date(article.articleDate);
+            return !isNaN(articleDate.getTime()) && articleDate >= minDate;
+        });
+
+        // Resolve or reject based on results
+        if (filteredArticles.length > 0) {
+            resolve(filteredArticles);
+        } else {
+            reject("No articles found after the specified date.");
+        }
+    });
 }; 
 
 // Get article by ID
@@ -124,10 +146,6 @@ function getArticleById(id) {
                 article.categoryName = getCategoryNameById(article.categoryId); 
             });
             resolve(foundArticle);
-            // resolve({
-            //     ...foundArticle,
-            //     categoryName: getCategoryNameById(foundArticle.categoryId) // Add category name
-            // });
         } else {
             reject("no result returned");
         }
