@@ -4,7 +4,7 @@
 **Student Number:** 167096239  
 **Student Email:** hnguyen169@myseneca.ca  
 **Date Created:** September 21, 2024  
-**Last Updated:** November 18, 2024
+**Last Updated:** November 27, 2024
 
 **GITHUB URL:** https://github.com/hnguyen169/web322_assignment  
 **VERCEL URLs:**  
@@ -27,7 +27,24 @@ https://web-322-assignment-git-master-hnguyen169s-projects.vercel.app/
 - Cloudinary (image uploads)
 
 **Database**: 
-- JSON files  
+- JSON files
+
+### Newest Features
+**Dynamic Categories:**
+- Categories are fetched dynamically from the backend and displayed in the dropdown when adding a new article.
+- Category management includes error handling for scenarios with no available categories.
+
+**Image Uploads:**
+- Integration with Cloudinary allows uploading and storing feature images for articles.
+
+**Article Details Page:**
+- Each article now displays detailed information, including its feature image, author, category, and content.
+
+**Error Handling:**
+- Comprehensive error messages for scenarios like missing fields or no articles/categories available.
+
+**Responsive Design Enhancements:**
+- Improved layout and styling for forms and tables to ensure mobile compatibility using Bootstrap classes.
 
 ### Running the Program
 
