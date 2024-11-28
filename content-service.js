@@ -93,7 +93,7 @@ function addArticle(articleData) {
 function getArticlesByCategory(category) {
     return new Promise((resolve, reject) => {
         const filteredArticles = articles.filter(article => 
-            getCategoryNameById(article.categoryId) === category
+            getCategoryNameById(article.categoryId) == category
         );
         
         if (filteredArticles.length) {
@@ -120,10 +120,14 @@ function getArticleById(id) {
         const foundArticle = articles.find(article => article.id == id); 
 
         if (foundArticle) {
-            resolve({
-                ...foundArticle,
-                categoryName: getCategoryNameById(foundArticle.categoryId) // Add category name
+            foundArticle.forEach(article => { 
+                article.categoryName = getCategoryNameById(article.categoryId); 
             });
+            resolve(foundArticle);
+            // resolve({
+            //     ...foundArticle,
+            //     categoryName: getCategoryNameById(foundArticle.categoryId) // Add category name
+            // });
         } else {
             reject("no result returned");
         }
@@ -132,7 +136,7 @@ function getArticleById(id) {
 
 // Helper function to get Name based on ID
 function getCategoryNameById(categoryId) {
-    const category = categories.find(cat => cat.id === categoryId);
+    const category = categories.find(cat => cat.id == categoryId);
     return category ? category.name : "Unknown Category";
 }
 

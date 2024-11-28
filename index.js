@@ -87,13 +87,14 @@ app.get('/articles', (req, res) => {
 
     dataPromise
         .then(articles => {
+            console.log(articles);
+
             // Map articles to include categoryName
             const updatedArticles = articles.map(article => {
                 // Ensure categoryName is fetched by categoryId
                 article.categoryName = contentService.getCategoryNameById(article.categoryId);
                 return article;
             });
-
             res.render('articles', { articles: updatedArticles, error: articles.length ? null : "No articles found." });
         })
         .catch(err => {

@@ -9,9 +9,9 @@
     <title>Add Article</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light p-3">
+    <nav class="navbar navbar-expand-lg p-3">
         <div class="container">
-            <a href="/" class="navbar-brand">My Blog</a>
+            <a href="/" class="navbar-brand">Harrison's Blog</a>
             <div class="navbar-nav">
                 <a class="nav-link" href="/">Home</a>
                 <a class="nav-link" href="/about">About</a>
@@ -23,24 +23,24 @@
     </nav>
 
     <div class="form-container">
-        <h2 class="text-primary">Add Article</h2>
+        <h2>Add Article</h2>
         <% if (error) { %>
             <p class="error"><%= error %></p>
         <% } %>
         <form action="/articles/add" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Title:</label>
-                <input type="text" id="title" name="title" class="form-control" required>
+                <input type="text" id="title" name="title" class="form-control" placeholder="Enter article title" required>
             </div>
 
             <div class="mb-3">
                 <label for="author" class="form-label">Author:</label>
-                <input type="text" id="author" name="author" class="form-control" required>
+                <input type="text" id="author" name="author" class="form-control" placeholder="Enter article author" required>
             </div>
 
             <div class="mb-3">
                 <label for="category" class="form-label">Category:</label>
-                <select id="category" name="category" class="form-select" required>
+                <select id="category" name="categoryId" class="form-select" placeholder="Enter article category" required>
                     <% categories.forEach(category => { %>
                         <option value="<%= category.id %>"><%= category.name %></option>
                     <% }); %>
@@ -48,22 +48,34 @@
             </div>
 
             <div class="mb-3">
+                <label for="content" class="form-label">Content:</label>
+                <textarea id="content" name="content" rows="5" class="form-control" placeholder="Enter article content" required></textarea>
+            </div>
+            
+            <div class="mb-3">
                 <label for="featureImage" class="form-label">Feature Image:</label>
                 <input type="file" id="featureImage" name="featureImage" class="form-control">
             </div>
 
             <div class="mb-3">
-                <label for="content" class="form-label">Content:</label>
-                <textarea id="content" name="content" rows="5" class="form-control" required></textarea>
+                <label for="published" class="form-label">Published:</label>
+                <input type="checkbox" id="published" name="published" class="form-check-input">
+            </div>
+            
+            <div class="mb-3">
+                <label for="date" class="form-label">Published Date:</label>
+                <input type="date" id="date" name="date" class="form-control">
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Add Article</button>
+            <button type="submit" class="btn btn-info w-100">Add Article</button>
         </form>
     </div>
 
-    <footer class="bg-light text-center py-3 mt-5">
+    <footer class="text-center py-3 mt-5">
         <hr>
-        <p>Harrison Nguyen • 167096239 • hnguyen169@myseneca.ca</p>
+        <p>© 2024 Harrison Nguyen • 167096239 • 
+            <a href="mailto:hnguyen169@myseneca.ca">hnguyen169@myseneca.ca</a> • All rights reserved.
+        </p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
