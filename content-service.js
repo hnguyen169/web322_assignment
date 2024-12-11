@@ -4,158 +4,91 @@
 * Student ID: 167096239
 * Email: hnguyen169@myseneca.ca
 * Date Created: October 1, 2024
-* Last Modified: November 18, 2024
+* Last Modified: December 11, 2024
 ******************************/
 
 const fs = require('fs').promises;
 const path = require('path');
+const { Pool } = require('pg');
 
 let articles = [];
 let categories = [];
 
+// Connect using Neon.tech credentials
+const pool = new Pool({
+    user: 'web322db_owner',
+    host: 'ep-young-surf-a5vilnef.us-east-2.aws.neon.tech',
+    database: 'blog_database',
+    password: 'H0VUejW8TvQd',
+    port: 5432,
+    ssl: { rejectUnauthorized: false }, // Needed for Neon.tech
+});
+
 // Initialize data
 function initialize() {
-    return new Promise((res, rej) => {
-        const articlesPath = path.join(__dirname, '/data/articles.json');
-        const categoriesPath = path.join(__dirname, '/data/categories.json');
-
-        fs.readFile(articlesPath, 'utf8')
-            .then(data => {
-                articles = JSON.parse(data);
-                return fs.readFile(categoriesPath, 'utf8');
-            })
-            .then(data => {
-                categories = JSON.parse(data);
-                res();
-            })
-            .catch(err => {
-                rej("unable to read file");
-        });
-    });
+    return Promise.resolve(); // Data is in database
 }
 
 // Get all published articles
 function getPublishedArticles() {
-    return new Promise((res, rej) => {
-        const publishedArticles = articles
-            .filter(article => article.published)
-            .map(article => ({
-                ...article,
-                categoryName: getCategoryNameById(article.categoryId) // Add category name
-            }));
-
-        if (publishedArticles.length > 0) {
-            res(publishedArticles);
-        } else {
-            rej("no results returned");
-        }
-    });
+    return pool.query(
+        `SELECT a.*, c.name AS category_name 
+         FROM articles a 
+         INNER JOIN categories c ON a.category_id = c.id 
+         WHERE a.published = true`
+    )
+        .then(res => res.rows)
+        .catch(err => Promise.reject("No published articles found"));
 }
+
 
 // Get all articles
 function getAllArticles() {
-    return new Promise((res, rej) => {
-        if (articles.length > 0) {
-            const updatedArticles = articles.map(article => ({
-                ...article,
-                categoryName: getCategoryNameById(article.categoryId) // Add category name
-            }));
-            res(updatedArticles);
-        } else {
-            rej("no results returned");
-        }
-    });
+    return pool.query('SELECT * FROM articles')
+        .then(res => res.rows)
+        .catch(() => Promise.reject('No results returned'));
 }
 
 // Get all categories
-function getCategories () {
-    return new Promise((res, rej) => {
-        if (categories.length > 0) {
-            res(categories);
-        }
-        else {
-            rej("no results returned");
-        }
-    });
+function getCategories() {
+    return pool.query('SELECT * FROM categories')
+        .then(res => res.rows)
+        .catch(() => Promise.reject('No results returned'));
 }
 
 // Add an article
 function addArticle(articleData) {
-    return new Promise((resolve, reject) => {
-        articleData.published = articleData.published ? true : false;
-        articleData.id = articles.length + 1; // Set ID to the current length + 1
-        articles.push(articleData);
-        resolve(articleData);
-    });
+    const { title, content, author, published, categoryId, date } = articleData;
+    return pool.query(
+        'INSERT INTO articles (title, content, author, published, category_id, article_date) VALUES ($1, $2, $3, $4, $5, $6)',
+        [title, content, author, published, categoryId, date]
+    )
+        .then(() => 'Article added successfully')
+        .catch(() => Promise.reject('Failed to add article'));
 }
 
 // Get articles by category
-function getArticlesByCategory(category) {
-    return new Promise((resolve, reject) => {
-        const filteredArticles = articles.filter(article => 
-            getCategoryNameById(article.categoryId) == category
-        );
-        
-        if (filteredArticles.length) {
-            resolve(filteredArticles);
-        } else {
-            reject(new Error("No articles found for this category."));
-        }
-    });
+function getArticlesByCategory(categoryId) {
+    return pool.query('SELECT * FROM articles WHERE category_id = $1', [categoryId])
+        .then(res => res.rows)
+        .catch(() => Promise.reject('No results returned'));
 }
 
 // Get articles by minimum date
-function getArticlesByMinDate(minDateStr) { 
-    return new Promise((resolve, reject) => { 
-        // Validate the input date string format
-        const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(minDateStr);
-        if (!isValidDate) {
-            reject("Invalid date format. Expected YYYY-MM-DD.");
-            return;
-        }
-
-        // Parse the date
-        const minDate = new Date(minDateStr);
-        if (isNaN(minDate.getTime())) {
-            reject("Invalid date. Could not parse the provided date.");
-            return;
-        }
-
-        // Filter articles based on the date
-        const filteredArticles = articles.filter(article => {
-            const articleDate = new Date(article.articleDate);
-            return !isNaN(articleDate.getTime()) && articleDate >= minDate;
-        });
-
-        // Resolve or reject based on results
-        if (filteredArticles.length > 0) {
-            resolve(filteredArticles);
-        } else {
-            reject("No articles found after the specified date.");
-        }
-    });
-}; 
+function getArticlesByMinDate(minDateStr) {
+    return pool.query(
+        `SELECT * FROM articles WHERE article_date >= $1`,
+        [minDateStr]
+    )
+        .then(res => res.rows)
+        .catch(() => Promise.reject("No articles found after the specified date"));
+}
 
 // Get article by ID
-function getArticleById(id) { 
-    return new Promise((resolve, reject) => { 
-        const foundArticle = articles.find(article => article.id == id); 
-
-        if (foundArticle) {
-            foundArticle.forEach(article => { 
-                article.categoryName = getCategoryNameById(article.categoryId); 
-            });
-            resolve(foundArticle);
-        } else {
-            reject("no result returned");
-        }
-    }); 
-}; 
-
-// Helper function to get Name based on ID
-function getCategoryNameById(categoryId) {
-    const category = categories.find(cat => cat.id == categoryId);
-    return category ? category.name : "Unknown Category";
+function getArticleById(id) {
+    return pool.query('SELECT * FROM articles WHERE id = $1', [id])
+        .then(res => (res.rows.length > 0 ? res.rows[0] : Promise.reject('No article found')))
+        .catch(() => Promise.reject('No results returned'));
 }
 
 module.exports = {
@@ -166,6 +99,5 @@ module.exports = {
     addArticle,
     getArticlesByCategory,
     getArticlesByMinDate,
-    getArticleById,
-    getCategoryNameById
+    getArticleById
 };
